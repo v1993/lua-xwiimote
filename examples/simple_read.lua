@@ -33,7 +33,8 @@ end
 
 local loop = lgi.GLib.MainLoop()
 source:attach(loop:get_context())
-wiiremote:open(wii.core)
+assert(wiiremote:open(wii.core))
+wiiremote:open(wii.pro)
 
 print()
 loop:run()
