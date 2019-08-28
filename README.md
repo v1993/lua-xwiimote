@@ -1,7 +1,7 @@
 # lua-xwiimote
 This is XWiimote bindings for Lua 5.3.
 
-This library allow you to use Linux XWiimote stack in your Lua application. It binds all functional of the first. Visit our [wiki](wiki) for more details on usage.
+This library allow you to use Linux XWiimote stack in your Lua application. It binds all functional of the first. Visit our [wiki](https://github.com/v1993/lua-xwiimote/wiki) for more details on usage.
 
 # Notes
 
