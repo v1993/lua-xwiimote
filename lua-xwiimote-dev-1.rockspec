@@ -2,7 +2,7 @@ package = "lua-xwiimote"
 rockspec_format = "3.0"
 version = "dev-1"
 source = {
-   url = "https://github.com/v1993/lua-xwiimote.git"
+   url = "git://github.com/v1993/lua-xwiimote"
 }
 
 description = {
