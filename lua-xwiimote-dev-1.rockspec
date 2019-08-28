@@ -1,23 +1,34 @@
 package = "lua-xwiimote"
+rockspec_format = "3.0"
 version = "dev-1"
 source = {
-   url = "*** please add URL for source tarball, zip or repository here ***"
+   url = "https://github.com/v1993/lua-xwiimote.git"
 }
+
 description = {
-   homepage = "*** please enter a project homepage ***",
-   license = "MIT"
+   summary = 'Lua bindings to XWiimote linux stack',
+   homepage = "https://github.com/v1993/lua-xwiimote",
+   issues_url = "https://github.com/v1993/lua-xwiimote/issues",
+   license = "MIT/X11",
+   labels = { 'linux', 'game', 'joystick' }
 }
+
+supported_platforms = { 'linux' }
+
 dependencies = {
-   "lua >= 5.3, < 5.5"
+   "lua >= 5.3, < 5.4"
 }
+
 external_dependencies = {
    XWIIMOTE = {
       library = "xwiimote";
       header = "xwiimote.h";
    }
 }
+
 build = {
    type = "builtin",
+   copy_directories = { 'examples' },
    modules = {
       xwiimote = {
          incdirs = {
