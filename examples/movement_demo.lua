@@ -3,7 +3,7 @@
 -- [-409; 410]
 local ACCEL_MAX = 410
 -- Cant say for sure but looks this way
-local MPLUS_MAX = 335127
+local MPLUS_MAX = 335160
 
 local test_mplus = ...
 
@@ -111,9 +111,11 @@ local functions = {
 builder:connect_signals(functions)
 
 if test_mplus then
+	print('Testing MotionPlus')
 	assert(wiiremote:open(wii.mplus))
 	wiiremote:set_mp_normalization(0,0,0,1)
 else
+	print('Testing accelerometer')
 	assert(wiiremote:open(wii.accel))
 end
 
@@ -123,7 +125,7 @@ app.on_activate = function()
 	gtkobj.window:show_all()
 end
 
-app:run({arg[0], ...})
+app:run({arg[0]})
 
 print('max, min')
 print(max, min)
