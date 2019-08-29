@@ -1,10 +1,22 @@
 -- Got by testing real WiiRemote
-local IR_X_MAX = 1016
-local IR_Y_MAX = 760
+
+-- [-409; 410]
+local ACCEL_MAX = 410
+-- Cant say for sure but looks this way
+local MPLUS_MAX = 335127
+
+local test_mplus = ...
+
+local MAX_VAL
+if test_mplus then
+	MAX_VAL = MPLUS_MAX
+else
+	MAX_VAL = ACCEL_MAX
+end
 
 local dotSize = 20
 local colorEmpty = {1, 1, 1}
-local colorDot = {1, 0, 0}
+local colorLine = {0, 0, 0}
 
 local wii = require 'xwiimote'
 
@@ -16,7 +28,7 @@ local lgi = require 'lgi'
 local	Gtk,		GLib,		Gdk,		GObject,		Gio =
 		lgi.Gtk,	lgi.GLib,	lgi.Gdk,	lgi.GObject,	lgi.Gio
 
-local app = Gtk.Application { application_id = 'org.xwiimote.irdemo' }
+local app = Gtk.Application { application_id = 'org.xwiimote.acceldemo' }
 
 local gtkobj, builder
 
@@ -34,7 +46,7 @@ end
 
 local source
 
-local irNew = {}
+local data3d = {x = 0, y = 0, z = 0}
 
 do
 	local fd = wiiremote:get_fd()
@@ -42,8 +54,10 @@ do
 	local source = stream:create_source()
 	source:set_callback(function()
 		for ev in wiiremote:iter() do
-			if ev.ir then
-				irNew = ev.ir
+			if ev.accel then
+				data3d = ev.accel
+			elseif ev.mplus then
+				data3d = ev.mplus
 			elseif ev.watch then
 				print('Wiimote disconnected, exiting')
 				gtkobj.window:destroy()
@@ -59,33 +73,35 @@ local function areaSize()
 	return gtkobj.area:get_allocated_width(), gtkobj.area:get_allocated_height()
 end
 
-local function dotCoords(x, y)
-	local w, h = areaSize()
-
-	local xt, yt = w*x/IR_X_MAX, h*y/IR_Y_MAX
-	return xt-dotSize/2, yt-dotSize/2, dotSize, dotSize
-end
-
-local function dot_draw(cr, x, y)
-	cr:rectangle(dotCoords(x, y))
-	cr:fill()
-end
-
-local xmax, ymax = 0/0, 0/0
-local xmin, ymin = 0/0, 0/0
+local max, min = 0, 0
 
 local functions = {
 	draw = function(self, cr)
+		max = math.max(max, data3d.x, data3d.y, data3d.z)
+		min = math.min(min, data3d.x, data3d.y, data3d.z)
+		local x, y = areaSize()
+		local cx, cy = x/2, y/2
 		cr:set_source_rgb(table.unpack(colorEmpty))
-		cr:rectangle(0, 0, areaSize())
+		cr:rectangle(0, 0, x, y)
 		cr:fill()
 
-		cr:set_source_rgb(table.unpack(colorDot))
-		for k,v in ipairs(irNew) do
-			xmax, ymax = math.max(v.x, xmax), math.max(v.y, ymax)
-			xmin, ymin = math.min(v.x, xmin), math.min(v.y, ymin)
-			dot_draw(cr, v.x, v.y)
-		end
+		cr:set_source_rgb(table.unpack(colorLine))
+		cr:set_line_width(5);
+
+		-- X axis
+		cr:move_to(cx,cy)
+		cr:line_to(cx+data3d.x*cx/MAX_VAL,cy)
+		cr:stroke()
+
+		-- Z axis (as Y because it lays this way)
+		cr:move_to(cx,cy)
+		cr:line_to(cx,cy+data3d.z*cy/MAX_VAL)
+		cr:stroke()
+
+		-- Y axis (as Z because it lays this way)
+		cr:move_to(cx,cy)
+		cr:line_to(cx+data3d.y*cx/MAX_VAL,cy-data3d.y*cy/MAX_VAL)
+		cr:stroke()
 
 		gtkobj.area:queue_draw_area(0, 0, areaSize())
 		collectgarbage() -- X11 (not lua!) eat memory without this. Why?
@@ -94,7 +110,12 @@ local functions = {
 
 builder:connect_signals(functions)
 
-assert(wiiremote:open(wii.ir))
+if test_mplus then
+	assert(wiiremote:open(wii.mplus))
+	wiiremote:set_mp_normalization(0,0,0,1)
+else
+	assert(wiiremote:open(wii.accel))
+end
 
 app.on_activate = function()
 	app:add_window(gtkobj.window)
@@ -104,8 +125,9 @@ end
 
 app:run({arg[0], ...})
 
--- Carefully calibrated values:
--- 1016		760			1		1
+print('max, min')
+print(max, min)
 
-print('max x, max y, min x, min y')
-print(xmax, ymax, xmin, ymin)
+if test_mplus then
+	print('Calibration values:', wiiremote:get_mp_normalization())
+end

@@ -10,6 +10,8 @@ local GLib, Gio = lgi.GLib, lgi.Gio
 
 local source
 
+local loop = lgi.GLib.MainLoop()
+
 do
 	local fd = wiiremote:get_fd()
 	local stream = Gio.UnixInputStream.new(fd, false)
@@ -25,13 +27,15 @@ do
 					(ev.state == 1 and 'down') or
 					'auto-repeat'
 				))
+			elseif ev.watch then
+				print('Wiimote disconnected, exiting')
+				loop:quit()
 			end
 		end
 		return true
 	end)
 end
 
-local loop = lgi.GLib.MainLoop()
 source:attach(loop:get_context())
 assert(wiiremote:open(wii.core))
 wiiremote:open(wii.pro)

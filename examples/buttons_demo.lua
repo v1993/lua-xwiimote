@@ -35,6 +35,9 @@ do
 			if ev.key then
 				local btn = gtkobj[ev.key]
 				if btn then btn.active = (ev.state ~= 0) end
+			elseif ev.watch then
+				print('Wiimote disconnected, exiting')
+				gtkobj.window:destroy()
 			end
 		end
 		return true
