@@ -16,7 +16,7 @@ local lgi = require 'lgi'
 local	Gtk,		GLib,		Gdk,		GObject,		Gio =
 		lgi.Gtk,	lgi.GLib,	lgi.Gdk,	lgi.GObject,	lgi.Gio
 
-local app = Gtk.Application { application_id = 'org.xwiimote.irdemo' }
+local app = Gtk.Application { application_id = 'org.xwiimote.irdemo', flags = 'NON_UNIQUE' }
 
 local gtkobj, builder
 

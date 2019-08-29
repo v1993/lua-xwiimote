@@ -27,7 +27,7 @@ local lgi = require 'lgi'
 local	Gtk,		GLib,		Gdk,		GObject,		Gio =
 		lgi.Gtk,	lgi.GLib,	lgi.Gdk,	lgi.GObject,	lgi.Gio
 
-local app = Gtk.Application { application_id = 'org.xwiimote.acceldemo' }
+local app = Gtk.Application { application_id = 'org.xwiimote.movementdemo', flags = 'NON_UNIQUE' }
 
 local gtkobj, builder
 
