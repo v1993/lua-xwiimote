@@ -14,7 +14,6 @@ else
 	MAX_VAL = ACCEL_MAX
 end
 
-local dotSize = 20
 local colorEmpty = {1, 1, 1}
 local colorLine = {0, 0, 0}
 
