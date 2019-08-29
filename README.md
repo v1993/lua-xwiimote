@@ -5,4 +5,4 @@ This library allow you to use Linux XWiimote stack in your Lua application. It b
 
 # Notes
 
-While this is completely standalone library, you may wish to use `poll` from [luaposix](https://github.com/luaposix/luaposix) or `Gio.UnixInputStream` from [lgi](https://github.com/pavouk/lgi) to get noticed hen events become available to read to avoid overloading your CPU and/or blocking the flow of application. Many of examples use `Gio.UnixInputStream` for this very reason.
+While this is completely standalone library, you may wish to use `poll` from [luaposix](https://github.com/luaposix/luaposix) or `Gio.UnixInputStream` from [lgi](https://github.com/pavouk/lgi) to get noticed when events become available to read to avoid overloading your CPU and/or blocking the flow of application. Many of examples use `Gio.UnixInputStream` for this very reason.
