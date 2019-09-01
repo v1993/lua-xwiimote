@@ -212,6 +212,7 @@ const struct luaL_Reg luawii_iface_methods[] = {
 	{ "watch",					luawii_iface_watch },
 	{ "open",					luawii_iface_open },
 	{ "close",					luawii_iface_close },
+	{ "opened",					luawii_iface_opened },
 	{ "available",				luawii_iface_available },
 
 	{ "poll",					luawii_iface_dispatch },
