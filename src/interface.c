@@ -9,6 +9,7 @@ static struct xwii_iface* luawii_iface_check(lua_State* L) {
 	struct xwii_iface** iface = luaL_checkudata(L, 1, LUAWII_IFACE_MT);
 	if (*iface) return *iface;
 	else luaL_error(L, "accessing invalid interface object");
+	return NULL;
 };
 
 static int luawii_iface_handle_result(lua_State* L, int result) {
@@ -37,6 +38,7 @@ static int luawii_iface_gc(lua_State* L) {
 		xwii_iface_unref(*iface);
 		*iface = NULL;
 	}
+	return 0;
 };
 
 static int luawii_iface_get_fd(lua_State* L) {

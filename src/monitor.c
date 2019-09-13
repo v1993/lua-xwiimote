@@ -6,6 +6,7 @@ static struct xwii_monitor* luawii_monitor_check(lua_State* L) {
 	struct xwii_monitor** mon = luaL_checkudata(L, 1, LUAWII_MONITOR_MT);
 	if (*mon) return *mon;
 	else luaL_error(L, "accessing invalid monitor object");
+	return NULL;
 };
 
 static int luawii_monitor_gc(lua_State* L) {
@@ -15,6 +16,7 @@ static int luawii_monitor_gc(lua_State* L) {
 		xwii_monitor_unref(*mon);
 		*mon = NULL;
 	}
+	return 0;
 };
 
 static int luawii_monitor_set_blocking(lua_State* L) {
