@@ -1,0 +1,8 @@
+queries:
+  include: "*"
+extraction:
+  cpp:
+    prepare:
+      packages:
+      - "liblua5.3-dev"
+      - "libxwiimote-dev"
