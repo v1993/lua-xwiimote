@@ -22,7 +22,10 @@ const char* luawii_event_keyname(const enum xwii_event_keys key) {
 
 		case XWII_KEY_THUMBL:	return "thumb L";
 		case XWII_KEY_THUMBR:	return "thumb R";
+
+		case XWII_KEY_NUM:		break;
 	};
+
 	return "invalid";
 };
 

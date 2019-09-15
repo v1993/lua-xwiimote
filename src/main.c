@@ -27,11 +27,9 @@ const struct luawii_constants iface_type[] = {
 
 int luaopen_xwiimote(lua_State* L) {
 	luaL_newlib(L, luawii_global);
-	//lua_newtable(L);
 	for (size_t i = 0; iface_type[i].name != NULL; ++i) {
 		lua_pushinteger(L, iface_type[i].val);
 		lua_setfield(L, -2, iface_type[i].name);
 	};
-	//lua_setfield(L,-2, "const");
 	return 1;
 };
